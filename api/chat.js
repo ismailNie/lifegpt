@@ -9,7 +9,7 @@
 
      try {
        const response = await axios.post(
-         'https://spaq-oai-instance-01.openai.azure.com/openai/deployments/<your-deployment-id>/completions?api-version=2022-12-01',
+         'https://spaq-oai-instance-01.openai.azure.com/openai/deployments/GPT-4/chat/completions?api-version=2024-06-01',
          {
            prompt,
            max_tokens: 100,

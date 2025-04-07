@@ -1,4 +1,15 @@
+const fs = require('fs');
+const path = require('path');
 const axios = require('axios');
+
+// Load the knowledge base into memory
+let knowledgeBase = '';
+
+try {
+  knowledgeBase = fs.readFileSync(path.join(__dirname, 'knowledge_base.txt'), 'utf-8');
+} catch (error) {
+  console.error('Failed to load knowledge base:', error.message);
+}
 
 module.exports = async (req, res) => {
   const { prompt } = req.body;
@@ -8,10 +19,13 @@ module.exports = async (req, res) => {
   }
 
   try {
+    // Combine knowledge base with user prompt
+    const augmentedPrompt = `Knowledge Base:\n${knowledgeBase}\n\nUser Prompt:\n${prompt}`;
+
     const response = await axios.post(
       'https://spaq-oai-instance-01.openai.azure.com/openai/deployments/GPT-4/chat/completions?api-version=2024-06-01',
       {
-        messages: [{ role: 'user', content: prompt }],
+        messages: [{ role: 'user', content: augmentedPrompt }],
         max_tokens: 100,
         temperature: 0.7,
       },
